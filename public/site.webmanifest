@@ -1,0 +1,15 @@
+{
+  "name": "Victor Oliveira Personal Trainer",
+  "short_name": "Victor Oliveira",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#222529",
+  "background_color": "#222529",
+  "display": "browser",
+  "lang": "pt-BR"
+}

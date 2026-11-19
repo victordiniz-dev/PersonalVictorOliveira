@@ -1,0 +1,15 @@
+node_modules
+dist
+*.log
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# Variáveis locais (o .env versionado só tem dados públicos do site)
+.env.local
+.env.*.local
+
+# Configurações pessoais do Claude Code (as skills em .claude/skills/ vão para o Git)
+.claude/settings.local.json
+.superpowers/
