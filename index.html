@@ -48,10 +48,16 @@
     <!--app-jsonld-->
 
     <!-- Liga as animações antes da primeira pintura (evita conteúdo "piscando").
-         Sem JS ou com "reduzir movimento", a página aparece inteira e parada. -->
+         Sem JS ou com "reduzir movimento", a página aparece inteira e parada.
+         Rede de segurança: se o app não iniciar em 4s (rede ruim, erro no bundle),
+         a classe sai e todo o conteúdo aparece sem animação.
+         ATENÇÃO: o hash deste script está na CSP do vercel.json; o build confere. -->
     <script>
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
         document.documentElement.classList.add('motion')
+        setTimeout(function () {
+          if (!window.__appReady) document.documentElement.classList.remove('motion')
+        }, 4000)
       }
     </script>
 

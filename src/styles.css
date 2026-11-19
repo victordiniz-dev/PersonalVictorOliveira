@@ -353,7 +353,9 @@ h3 {
   display: none;
 }
 
-@media (max-width: 860px) {
+/* Menu de celular até 1024px: entre 861px e ~1000px os 5 links + o botão não cabiam
+   e o botão quebrava em duas linhas. */
+@media (max-width: 1024px) {
   .nav-toggle {
     display: grid;
     place-items: center;
@@ -1150,8 +1152,8 @@ h3 {
 
 .about__facts {
   display: grid;
-  grid-template-columns: repeat(3, auto);
-  justify-content: start;
+  /* Adaptativa: 3 colunas quando cabem, senão quebra (antes vazava entre 861 e ~1100px) */
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
   gap: 1rem 2.5rem;
   margin-top: 2.25rem;
   padding-top: 1.5rem;
@@ -1165,7 +1167,7 @@ h3 {
 
 .about__facts dd {
   font-weight: 650;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .about__facts a {

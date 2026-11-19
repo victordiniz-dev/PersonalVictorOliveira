@@ -73,6 +73,17 @@ Os dados do contato ficam em um lugar só, o arquivo [`.env`](.env). O `<head>` 
 
 Editorial esportivo: grafite `#222529`, giz `#EDEBE5` e laranja-sinal `#FF5B1A`. Uma família só, a Archivo variável, usando o eixo de largura: condensada nos títulos e normal no texto. O único movimento automático é o título do hero "contraindo" de largo para condensado ao carregar; ele é desligado para quem usa "reduzir movimento".
 
+## Antes de publicar: conferência automática
+
+`npm run check:launch` lista o que ainda é provisório (WhatsApp, CREF, telefone, depoimentos de exemplo, fotos de marcação). O mesmo script roda em todo `npm run build`: localmente só avisa, mas **no deploy de produção da Vercel ele faz o build falhar** enquanto houver dado provisório. Deploys de preview só avisam.
+
+## Segurança
+
+- Cabeçalhos HTTP em `vercel.json`: CSP, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, COOP e HSTS. O `npm run preview` usa os mesmos cabeçalhos, então dá para testar a CSP localmente.
+- A CSP libera o script inline do `<head>` pelo hash. Se esse script mudar, o build falha e mostra o hash novo para colocar no `vercel.json`.
+- Ao adicionar serviços externos (estatísticas, mapas, vídeos), libere o domínio deles na CSP.
+- Se o JavaScript não iniciar em 4s, o script do `<head>` desliga as animações e mostra todo o conteúdo.
+
 ## Componentes do 21st.dev
 
 O 21st.dev hoje exige conta para liberar o código. Os componentes abaixo são os mesmos que ele publica, instalados das bibliotecas abertas de origem com `npx shadcn@latest add` (base Tailwind v4 + shadcn em `components.json`, tokens mapeados para a paleta do site em `src/index.css`). Cada arquivo em `src/components/ui/` tem no topo a origem e o que foi adaptado.

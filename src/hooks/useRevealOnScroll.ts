@@ -1,5 +1,12 @@
 import { useEffect } from 'react'
 
+declare global {
+  interface Window {
+    /** Avisa o script do <head> que o app iniciou (desliga a rede de segurança). */
+    __appReady?: boolean
+  }
+}
+
 /**
  * Marca com `data-inview` cada elemento `[data-reveal]` quando ele entra na tela.
  * O CSS (src/motion.css) faz a animação. Um único observer serve a página toda.
@@ -8,6 +15,7 @@ import { useEffect } from 'react'
  */
 export function useRevealOnScroll() {
   useEffect(() => {
+    window.__appReady = true
     const elements = document.querySelectorAll<HTMLElement>('[data-reveal]')
     const motionOn = document.documentElement.classList.contains('motion')
 

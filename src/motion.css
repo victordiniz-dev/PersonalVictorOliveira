@@ -14,19 +14,20 @@
   interpolate-size: allow-keywords; /* permite animar até height:auto (FAQ) */
 }
 
+/* A "contração" do título usa scale (compositor/GPU), não font-stretch:
+   variar a largura da fonte recalculava o layout a cada quadro e custava ~2,5s
+   de thread principal no celular (Lighthouse). */
 @keyframes contract {
   from {
-    font-stretch: 125%;
-    font-weight: 300;
     opacity: 0;
+    scale: 1.7 1;
   }
   35% {
     opacity: 1;
   }
   to {
-    font-stretch: 62%;
-    font-weight: 850;
     opacity: 1;
+    scale: 1 1;
   }
 }
 
@@ -47,15 +48,6 @@
   }
   to {
     opacity: 1;
-  }
-}
-
-@keyframes wipe {
-  from {
-    clip-path: inset(100% 0 0 0);
-  }
-  to {
-    clip-path: inset(0 0 0 0);
   }
 }
 
@@ -100,6 +92,7 @@
 }
 
 .motion .hero__word {
+  transform-origin: left bottom;
   animation: contract 1.05s var(--ease-out) both;
   animation-delay: calc(var(--i) * 0.14s + 0.12s);
 }
@@ -121,11 +114,9 @@
   animation: fade-up 0.9s var(--ease-out) 0.84s both;
 }
 
-/* A foto abre como uma cortina de baixo para cima e "assenta" o zoom */
-.motion .hero__frame {
-  animation: wipe 1.25s var(--ease-in-out) 0.15s both;
-}
-
+/* A foto do hero é o LCP (maior elemento da primeira tela): ela aparece de imediato.
+   Só o zoom "assenta" (scale, sem custo de layout). A cortina ficou para as fotos
+   abaixo da dobra. */
 .hero__frame img {
   scale: 1.12; /* folga para o parallax não mostrar borda */
 }
@@ -343,7 +334,7 @@
 
 /* ---------- menu do celular ---------- */
 
-@media (max-width: 860px) {
+@media (max-width: 1024px) {
   .motion .site-nav.is-open {
     animation: fade-in 0.3s ease-out both;
   }
@@ -358,7 +349,7 @@
 /* ---------- microinterações de hover (não dependem de .motion) ---------- */
 
 /* Sublinhado do menu cresce da esquerda */
-@media (min-width: 861px) {
+@media (min-width: 1025px) {
   .site-nav ul a {
     border-bottom: 0;
     background: linear-gradient(var(--signal), var(--signal)) no-repeat left bottom / 0% 2px;
