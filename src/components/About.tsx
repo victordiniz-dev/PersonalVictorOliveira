@@ -6,7 +6,7 @@ export function About() {
   return (
     <section className="section section--light" id="sobre" aria-labelledby="sobre-title">
       <div className="wrap about">
-        <figure className="about__photo">
+        <figure className="about__photo" data-reveal="clip">
           <img
             src={photos.about.src}
             alt={photos.about.alt}
@@ -17,7 +17,7 @@ export function About() {
           />
         </figure>
 
-        <div className="about__text">
+        <div className="about__text" data-reveal="up">
           <h2 id="sobre-title">Sobre o Victor</h2>
           <p>
             Sou Victor Oliveira, personal trainer em Vila Velha, no Espírito Santo. Trabalho com

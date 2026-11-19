@@ -32,5 +32,6 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_')
   return {
     plugins: [react(), seoFiles(env.VITE_SITE_URL || 'https://example.com')],
+    define: { __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()) },
   }
 })

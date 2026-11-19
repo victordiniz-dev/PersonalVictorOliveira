@@ -47,6 +47,14 @@
     <!-- Dados estruturados (JSON-LD): gerados de src/seo.ts no build -->
     <!--app-jsonld-->
 
+    <!-- Liga as animações antes da primeira pintura (evita conteúdo "piscando").
+         Sem JS ou com "reduzir movimento", a página aparece inteira e parada. -->
+    <script>
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('motion')
+      }
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </head>
 

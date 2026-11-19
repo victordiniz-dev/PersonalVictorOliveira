@@ -52,14 +52,20 @@ export function Hero({ ref }: HeroProps) {
         </div>
 
         <figure className="hero__photo">
-          <img
-            src={photos.hero.src}
-            alt={photos.hero.alt}
-            width={800}
-            height={1000}
-            fetchPriority="high"
-            decoding="async"
-          />
+          <div className="hero__frame">
+            <img
+              src={photos.hero.src}
+              alt={photos.hero.alt}
+              width={800}
+              height={1000}
+              fetchPriority="high"
+              decoding="async"
+            />
+          </div>
+          <figcaption className="hero__tag">
+            <span className="hero__tag-dot" aria-hidden="true" />
+            Vila Velha, ES
+          </figcaption>
         </figure>
       </div>
     </section>

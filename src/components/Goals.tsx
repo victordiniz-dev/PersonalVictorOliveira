@@ -5,7 +5,7 @@ export function Goals() {
   return (
     <section className="section" id="objetivos" aria-labelledby="objetivos-title">
       <div className="wrap">
-        <header className="section__head">
+        <header className="section__head" data-reveal="up">
           <h2 id="objetivos-title">Você escolhe o objetivo. O treino é montado em cima dele.</h2>
           <p>
             Cada objetivo pede uma forma diferente de treinar: carga, repetições, descanso e
@@ -24,9 +24,13 @@ export function Goals() {
           </thead>
           <tbody>
             {goals.map((goal) => (
-              <tr key={goal.name}>
+              <tr key={goal.name} data-reveal="row">
                 <th scope="row">
                   <span className="ficha__goal">{goal.name}</span>
+                  <span className="ficha__rx">
+                    <span className="sr-only">Exemplo de prescrição: </span>
+                    {goal.prescription}
+                  </span>
                 </th>
                 <td>{goal.training}</td>
                 <td>{goal.audience}</td>

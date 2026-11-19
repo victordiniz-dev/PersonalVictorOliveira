@@ -1,5 +1,6 @@
 import '@fontsource-variable/archivo/wdth.css'
 import './styles.css'
+import './motion.css'
 import { StrictMode } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { App } from './App'

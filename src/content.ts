@@ -10,6 +10,8 @@ export interface Goal {
 
 export interface Mode {
   title: string
+  /** Onde o atendimento acontece (etiqueta do painel). */
+  where: string
   summary: string
   includes: string[]
   cta: string
@@ -58,6 +60,7 @@ export const goals: Goal[] = [
 export const modes: Mode[] = [
   {
     title: 'Presencial em Vila Velha',
+    where: 'Vila Velha, ES',
     summary: 'Aulas acompanhadas do início ao fim, na academia ou no local combinado.',
     includes: [
       'Avaliação física antes de começar',
@@ -70,6 +73,7 @@ export const modes: Mode[] = [
   },
   {
     title: 'Consultoria online',
+    where: 'Qualquer cidade',
     summary: 'Para quem mora em outra cidade ou prefere treinar no próprio horário.',
     includes: [
       'Treino montado para a sua academia e rotina',

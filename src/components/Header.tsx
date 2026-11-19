@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { whatsappLink } from '../config'
 import { ExternalLink } from './ExternalLink'
 
@@ -12,15 +12,39 @@ const navItems = [
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const toggleRef = useRef<HTMLButtonElement>(null)
+  const progressRef = useRef<HTMLSpanElement>(null)
 
-  // Borda do header só depois de rolar
+  // Um só listener de rolagem, limitado a um quadro por vez (requestAnimationFrame):
+  // borda do header, esconder ao descer / mostrar ao subir e barra de progresso.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8)
-    onScroll()
+    let lastY = window.scrollY
+    let frame = 0
+
+    const update = () => {
+      frame = 0
+      const y = window.scrollY
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      progressRef.current?.style.setProperty('--progress', String(max > 0 ? y / max : 0))
+      setScrolled(y > 8)
+      if (Math.abs(y - lastY) > 6) {
+        setHidden(y > lastY && y > 160)
+        lastY = y
+      }
+    }
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+
+    update()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(frame)
+    }
   }, [])
 
   // Esc fecha o menu e devolve o foco ao botão
@@ -38,11 +62,20 @@ export function Header() {
 
   const closeMenu = () => setMenuOpen(false)
 
+  const classes = [
+    'site-header',
+    scrolled && 'is-scrolled',
+    hidden && !menuOpen && 'is-hidden',
+    menuOpen && 'is-menu-open',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   return (
-    <header className={`site-header${scrolled ? ' is-scrolled' : ''}`}>
+    <header className={classes}>
       <div className="wrap site-header__inner">
         <a className="brand" href="#topo" aria-label="Victor Oliveira, início">
-          <span className="brand__name">Victor Oliveira</span>
+          <span className="brand__name" translate="no">Victor Oliveira</span>
           <span className="brand__role">Personal trainer</span>
         </a>
 
@@ -64,8 +97,8 @@ export function Header() {
           aria-label="Seções da página"
         >
           <ul>
-            {navItems.map((item) => (
-              <li key={item.href}>
+            {navItems.map((item, i) => (
+              <li key={item.href} style={{ '--d': i } as CSSProperties}>
                 <a href={item.href} onClick={closeMenu}>
                   {item.label}
                 </a>
@@ -81,6 +114,7 @@ export function Header() {
           </ExternalLink>
         </nav>
       </div>
+      <span className="scroll-progress" ref={progressRef} aria-hidden="true" />
     </header>
   )
 }

@@ -10,9 +10,12 @@ import { Modes } from './components/Modes'
 import { Results } from './components/Results'
 import { Steps } from './components/Steps'
 import { StickyCta } from './components/StickyCta'
+import { Ticker } from './components/Ticker'
+import { useRevealOnScroll } from './hooks/useRevealOnScroll'
 
 export function App() {
   const heroRef = useRef<HTMLElement>(null)
+  useRevealOnScroll()
 
   return (
     <>
@@ -22,6 +25,7 @@ export function App() {
       <Header />
       <main id="conteudo">
         <Hero ref={heroRef} />
+        <Ticker />
         <Goals />
         <Modes />
         <Steps />

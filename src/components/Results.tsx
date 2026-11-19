@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { site } from '../config'
 import { photos } from '../content'
 import { ExternalLink } from './ExternalLink'
@@ -6,7 +7,7 @@ export function Results() {
   return (
     <section className="section section--rule" id="resultados" aria-labelledby="resultados-title">
       <div className="wrap results">
-        <header className="section__head results__head">
+        <header className="section__head results__head" data-reveal="up">
           <h2 id="resultados-title">Resultados de quem treina comigo</h2>
           <p>
             A evolução dos alunos fica registrada nos destaques do Instagram, com antes e depois e
@@ -18,8 +19,8 @@ export function Results() {
         </header>
 
         <ul className="results__grid">
-          {photos.students.map((photo) => (
-            <li key={photo.src}>
+          {photos.students.map((photo, i) => (
+            <li key={photo.src} data-reveal="clip" style={{ '--d': i % 2 } as CSSProperties}>
               <img
                 src={photo.src}
                 alt={photo.alt}

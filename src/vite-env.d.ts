@@ -11,3 +11,6 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+/** Ano do build, injetado pelo vite.config.ts. */
+declare const __BUILD_YEAR__: number

@@ -5,7 +5,7 @@ export function Faq() {
   return (
     <section className="section" id="duvidas" aria-labelledby="duvidas-title">
       <div className="wrap faq">
-        <header className="section__head">
+        <header className="section__head" data-reveal="up">
           <h2 id="duvidas-title">Dúvidas frequentes</h2>
         </header>
 

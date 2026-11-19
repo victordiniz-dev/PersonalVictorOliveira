@@ -16,6 +16,10 @@
   --signal: #ff5b1a; /* acento: CTAs, prescrições, números */
   --signal-press: #e84d10;
 
+  /* Movimento: saídas longas e suaves, nada de "quique" */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
   /* Tipo */
   --font: 'Archivo Variable', 'Arial Narrow', Arial, sans-serif;
   --fs-small: 0.875rem;
@@ -153,36 +157,61 @@ h3 {
 
 /* ---------- botões e links ---------- */
 
+/* Botões: no hover uma "carga" de cor sobe por baixo do texto.
+   isolation + z-index:-1 põem a camada entre o fundo e o texto. */
 .btn {
+  --btn-bg: var(--signal);
+  --btn-fg: var(--ink);
+  --btn-fill: var(--ink);
+  --btn-fill-fg: var(--chalk);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   min-height: 3.25rem;
   padding: 0.8rem 1.5rem;
-  border: 2px solid var(--signal);
+  border: 2px solid var(--btn-bg);
   border-radius: 0.375rem;
-  background: var(--signal);
-  color: var(--ink);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
   font-size: 1rem;
   font-stretch: 90%;
   font-weight: 750;
   line-height: 1.1;
   text-align: center;
   text-decoration: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    transform 0.15s ease;
+    color 0.45s var(--ease-out),
+    border-color 0.45s var(--ease-out),
+    transform 0.2s var(--ease-out);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  background: var(--btn-fill);
+  transform: translateY(101%);
+  transition: transform 0.5s var(--ease-out);
 }
 
 .btn:hover {
-  background: var(--signal-press);
-  border-color: var(--signal-press);
+  color: var(--btn-fill-fg);
+  border-color: var(--btn-fill);
+}
+
+.btn:hover::before {
+  transform: translateY(0);
 }
 
 .btn:active {
-  transform: translateY(1px);
+  transform: scale(0.97);
 }
 
 .btn--small {
@@ -198,27 +227,18 @@ h3 {
 }
 
 .btn--dark {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--chalk);
-}
-
-.btn--dark:hover {
-  background: var(--signal);
-  border-color: var(--signal);
-  color: var(--ink);
+  --btn-bg: var(--ink);
+  --btn-fg: var(--chalk);
+  --btn-fill: var(--signal);
+  --btn-fill-fg: var(--ink);
 }
 
 .btn--ghost {
-  background: transparent;
-  color: var(--chalk);
+  --btn-bg: transparent;
+  --btn-fg: var(--chalk);
+  --btn-fill: var(--chalk);
+  --btn-fill-fg: var(--ink);
   border-color: var(--chalk);
-}
-
-.btn--ghost:hover {
-  background: var(--chalk);
-  border-color: var(--chalk);
-  color: var(--ink);
 }
 
 .link-quiet {
@@ -243,11 +263,36 @@ h3 {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease;
+  transition:
+    border-color 0.3s ease,
+    transform 0.5s var(--ease-out);
 }
 
 .site-header.is-scrolled {
   border-bottom-color: var(--iron);
+}
+
+/* Some ao descer, volta ao subir: mais espaço para o conteúdo no celular */
+.site-header.is-hidden {
+  transform: translateY(-100%);
+}
+
+/* Nunca esconder o header com o foco do teclado dentro dele */
+.site-header.is-hidden:focus-within {
+  transform: none;
+}
+
+/* Barra de leitura: preenche conforme a página é rolada (--progress de 0 a 1) */
+.scroll-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--signal);
+  transform-origin: left;
+  transform: scaleX(var(--progress, 0));
+  pointer-events: none;
 }
 
 .site-header__inner {
@@ -374,6 +419,7 @@ h3 {
     padding: 1rem var(--gutter) 1.5rem;
     background: var(--graphite);
     border-bottom: 1px solid var(--iron);
+    overscroll-behavior: contain;
     display: none;
   }
 
@@ -463,45 +509,6 @@ h3 {
   transform: translateY(-0.35em);
   align-self: flex-start;
   margin-top: 0.55em;
-}
-
-/* Momento único da página: as palavras "contraem" de largas para
-   condensadas ao carregar, como uma repetição. Só uma vez. */
-@media (prefers-reduced-motion: no-preference) {
-  .hero__word {
-    animation: contract 0.9s cubic-bezier(0.2, 0.7, 0.1, 1) both;
-    animation-delay: calc(var(--i) * 0.14s + 0.1s);
-  }
-
-  .hero__line .hero__rx {
-    animation: rx-in 0.4s ease-out both;
-    animation-delay: calc(var(--i) * 0.14s + 0.75s);
-  }
-
-  @keyframes contract {
-    from {
-      font-stretch: 125%;
-      font-weight: 300;
-      opacity: 0;
-    }
-    35% {
-      opacity: 1;
-    }
-    to {
-      font-stretch: 62%;
-      font-weight: 850;
-      opacity: 1;
-    }
-  }
-
-  @keyframes rx-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
 }
 
 .hero__lead {
@@ -714,34 +721,93 @@ h3 {
 
 /* ---------- atendimento ---------- */
 
+/* Dois painéis em contraste: presencial (giz, contorno) x online (tinta) */
 .modes {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: clamp(1rem, 2.5vw, 1.75rem);
 }
 
 .mode {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding-right: clamp(1.5rem, 4vw, 4rem);
+  padding: clamp(1.75rem, 3.5vw, 3rem);
+  border: 2px solid var(--ink);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition:
+    transform 0.6s var(--ease-out),
+    box-shadow 0.6s var(--ease-out);
 }
 
-.mode + .mode {
-  padding-left: clamp(1.5rem, 4vw, 4rem);
-  padding-right: 0;
-  border-left: 2px solid var(--ink);
+.mode--dark {
+  background: var(--ink);
+  color: var(--chalk);
+  color-scheme: dark;
+}
+
+/* Anilha decorativa no canto: gira devagar no hover */
+.mode::after {
+  content: '';
+  position: absolute;
+  right: -4.5rem;
+  top: -4.5rem;
+  width: 11rem;
+  height: 11rem;
+  border-radius: 50%;
+  border: 1.25rem solid currentColor;
+  opacity: 0.06;
+  transition: transform 1.2s var(--ease-out);
+  pointer-events: none;
+}
+
+.mode--dark::after {
+  border-color: var(--signal);
+  opacity: 0.18;
+}
+
+@media (hover: hover) {
+  .mode:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 1.5rem 3rem -1.5rem rgb(27 29 32 / 0.45);
+  }
+
+  .mode:hover::after {
+    transform: rotate(90deg) scale(1.08);
+  }
+}
+
+.mode__where {
+  align-self: flex-start;
+  padding: 0.3rem 0.75rem;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+  font-size: var(--fs-small);
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.mode--dark .mode__where {
+  border-color: var(--signal);
+  color: var(--signal);
 }
 
 .mode h3 {
-  font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem);
-  font-stretch: 68%;
+  font-size: clamp(2rem, 1.4rem + 2vw, 3rem);
+  font-stretch: 66%;
   font-weight: 800;
-  line-height: 1;
+  line-height: 0.95;
 }
 
-.mode > p {
+.mode__summary {
   color: var(--ink-soft);
   max-width: 28rem;
+}
+
+.mode--dark .mode__summary {
+  color: var(--steel);
 }
 
 .checklist {
@@ -775,18 +841,6 @@ h3 {
 @media (max-width: 760px) {
   .modes {
     grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-
-  .mode,
-  .mode + .mode {
-    padding: 0;
-    border-left: 0;
-  }
-
-  .mode + .mode {
-    padding-top: 3rem;
-    border-top: 2px solid var(--ink);
   }
 }
 
@@ -1162,6 +1216,187 @@ h3 {
   .sticky-cta {
     display: flex;
   }
+}
+
+/* ---------- componentes da v2 ---------- */
+
+/* Textura de granulação bem sutil sobre o grafite (papel de revista) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Foto do hero: moldura que recorta a imagem (para a cortina e o parallax) */
+.hero__frame {
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0.375rem;
+}
+
+.hero__photo img {
+  border-radius: 0;
+}
+
+.hero__tag {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--graphite) 80%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: var(--fs-small);
+  font-weight: 650;
+}
+
+.hero__tag-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 0 rgb(255 91 26 / 0.6);
+}
+
+/* Prescrição ao lado do objetivo na ficha, como no hero */
+.ficha__rx {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--signal);
+  font-size: 0.9375rem;
+  font-stretch: 75%;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.ficha__goal {
+  transition:
+    font-stretch 0.6s var(--ease-out),
+    color 0.4s ease;
+}
+
+@media (hover: hover) {
+  .ficha tbody tr:hover .ficha__goal {
+    font-stretch: 85%;
+    color: var(--signal);
+  }
+}
+
+/* Faixa em movimento */
+.ticker {
+  position: relative;
+  overflow: hidden;
+  background: var(--signal);
+  color: var(--ink);
+  padding-block: 0.85rem;
+  user-select: none;
+}
+
+.ticker__track {
+  display: flex;
+  width: max-content;
+}
+
+.ticker__row {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.ticker__item {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+  font-stretch: 62%;
+  font-weight: 850;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.ticker__item::after {
+  content: '';
+  width: 0.28em;
+  height: 0.28em;
+  margin-inline: 0.6em;
+  background: var(--ink);
+}
+
+.ticker__toggle {
+  position: absolute;
+  right: var(--gutter);
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--signal);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: scale 0.3s var(--ease-out);
+}
+
+.ticker__toggle:hover {
+  scale: 1.08;
+}
+
+.ticker__toggle:focus-visible {
+  outline-color: var(--ink);
+}
+
+/* Ícones desenhados em CSS: duas barras (pausar) e triângulo (retomar) */
+.icon-pause {
+  width: 0.75rem;
+  height: 0.85rem;
+  border-inline: 0.25rem solid currentColor;
+}
+
+.icon-play {
+  width: 0;
+  height: 0;
+  margin-left: 0.2rem;
+  border-block: 0.45rem solid transparent;
+  border-left: 0.75rem solid currentColor;
+}
+
+.ticker__item--outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--ink);
+}
+
+/* Como funciona: cada passo tem uma faixa laranja que enche em sequência */
+.step {
+  background-image: linear-gradient(var(--signal), var(--signal));
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: 100% 2px;
+}
+
+/* Assinatura grande no rodapé */
+.site-footer__mark {
+  grid-column: 1 / -1;
+  margin-bottom: 0.5rem;
+  color: var(--iron);
+  font-size: clamp(2.75rem, 12.6vw, 12.5rem);
+  font-stretch: 62%;
+  font-weight: 850;
+  line-height: 0.8;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {
