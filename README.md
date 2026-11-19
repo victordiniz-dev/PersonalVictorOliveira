@@ -42,7 +42,7 @@ Para mudar um texto, edite `src/content.ts`. As perguntas do FAQ alimentam ao me
 
 ## Antes de publicar (pendências)
 
-Os dados do contato ficam em um lugar só, o arquivo [`.env`](.env). O `<head>` usa os valores via `%VITE_...%` e o React via `import.meta.env` (ver `src/config.ts`).
+Os dados do contato ficam em um lugar só, o arquivo [`.env`](.env). O `<head>` usa os valores via `%VITE_...%` e o React via `import.meta.env` (ver `src/config.ts`). Esse `.env` vai para o Git porque só tem dados públicos (eles aparecem no HTML de qualquer jeito); nada secreto entra nele. Se preferir, cadastre os valores nas variáveis de ambiente da Vercel, que têm prioridade.
 
 - [ ] `VITE_WHATSAPP`: número real (só dígitos, `55` + DDD + número)
 - [ ] `VITE_PHONE_DISPLAY`: o mesmo número formatado
@@ -68,6 +68,7 @@ Os dados do contato ficam em um lugar só, o arquivo [`.env`](.env). O `<head>` 
 - Dados estruturados JSON-LD: `Person`, `LocalBusiness` (área atendida: Vila Velha e Brasil), `WebSite` e `FAQPage`
 - `robots.txt` e `sitemap.xml` gerados no build a partir de `VITE_SITE_URL`
 - Fonte auto-hospedada (Archivo variável), imagens com `width`/`height`, `loading="lazy"` abaixo da dobra
+- Página 404 própria (`public/404.html`, com `noindex`) e manifesto com ícones 192, 512 e maskable
 
 ## Design
 

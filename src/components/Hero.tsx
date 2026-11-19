@@ -19,9 +19,8 @@ export function Hero({ ref }: HeroProps) {
                 // --i escalona a animação de "contração" de cada linha
                 <span className="hero__line" style={{ '--i': i } as CSSProperties} key={goal.name}>
                   <span className="hero__word">{goal.name}.</span>
-                  <span className="hero__rx" aria-hidden="true">
-                    {goal.prescription}
-                  </span>
+                  {/* A série (5×5…) vem do CSS (::before): fica fora do texto do h1 */}
+                  <span className="hero__rx" data-rx={goal.prescription} aria-hidden="true" />
                 </span>
               ))}
             </span>

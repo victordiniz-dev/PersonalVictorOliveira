@@ -6,6 +6,7 @@ const navItems = [
   { href: '#objetivos', label: 'Objetivos' },
   { href: '#atendimento', label: 'Atendimento' },
   { href: '#como-funciona', label: 'Como funciona' },
+  { href: '#resultados', label: 'Resultados' },
   { href: '#sobre', label: 'Sobre' },
   { href: '#duvidas', label: 'Dúvidas' },
 ]
@@ -74,7 +75,7 @@ export function Header() {
   return (
     <header className={classes}>
       <div className="wrap site-header__inner">
-        <a className="brand" href="#topo" aria-label="Victor Oliveira, início">
+        <a className="brand" href="#topo">
           <span className="brand__name" translate="no">Victor Oliveira</span>
           <span className="brand__role">Personal trainer</span>
         </a>
