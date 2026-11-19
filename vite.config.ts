@@ -1,13 +1,14 @@
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig, loadEnv, type Plugin } from 'vite'
+import react from '@vitejs/plugin-react'
 
-// Gera robots.txt e sitemap.xml no build a partir de VITE_SITE_URL,
+// Gera robots.txt e sitemap.xml no build do cliente a partir de VITE_SITE_URL,
 // para que o domínio fique definido num lugar só (.env).
-function seoFiles(siteUrl) {
+function seoFiles(siteUrl: string): Plugin {
   const site = siteUrl.replace(/\/$/, '')
   const today = new Date().toISOString().slice(0, 10)
   return {
     name: 'seo-files',
-    apply: 'build',
+    apply: (_config, env) => env.command === 'build' && !env.isSsrBuild,
     generateBundle() {
       this.emitFile({
         type: 'asset',
@@ -30,7 +31,6 @@ function seoFiles(siteUrl) {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_')
   return {
-    plugins: [seoFiles(env.VITE_SITE_URL || 'https://example.com')],
-    build: { cssMinify: true },
+    plugins: [react(), seoFiles(env.VITE_SITE_URL || 'https://example.com')],
   }
 })

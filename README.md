@@ -2,28 +2,53 @@
 
 Landing page do [@victoroliveira.personal](https://www.instagram.com/victoroliveira.personal/), personal trainer em Vila Velha (ES).
 
-HTML estático + CSS + um pouco de JS, com build pelo Vite. O HTML já sai pronto do build (sem renderização no navegador), o que é o melhor cenário para SEO.
+React 19 + TypeScript + Vite. No build, a página é **pré-renderizada**: o HTML completo já vai pronto no `dist/index.html` (bom para o Google e para a prévia do link no WhatsApp), e o React só "hidrata" esse HTML no navegador.
 
 ## Rodar
 
+Precisa do [Node.js](https://nodejs.org) 20 ou mais novo.
+
 ```bash
-npm install
-npm run dev      # http://localhost:5173
-npm run build    # gera dist/ (com robots.txt e sitemap.xml)
-npm run preview  # serve o dist/
+npm install       # só na primeira vez
+npm run dev       # abre em http://localhost:5173 e atualiza ao salvar
 ```
 
-Deploy: importar o repositório na Vercel (framework "Vite", saída `dist`).
+Para ver exatamente o que vai ao ar:
+
+```bash
+npm run build     # typecheck + build + pré-renderização em dist/
+npm run preview   # serve o dist/ em http://localhost:4173
+```
+
+Deploy: importar o repositório na Vercel (framework "Vite", comando `npm run build`, saída `dist`).
+
+## Estrutura
+
+```
+index.html            <head> com SEO; o corpo vem do React
+src/
+  main.tsx            entrada do navegador (hidrata o HTML pré-renderizado)
+  entry-server.tsx    entrada do build, gera o HTML estático
+  App.tsx             monta as seções
+  components/         uma seção por arquivo (Hero, Goals, Modes, Steps...)
+  content.ts          todos os textos, tipados (objetivos, planos, FAQ, fotos)
+  config.ts           dados de contato lidos do .env + link do WhatsApp
+  seo.ts              JSON-LD gerado a partir do content.ts
+  styles.css          estilos
+scripts/prerender.mjs injeta o HTML e o JSON-LD no dist/index.html
+```
+
+Para mudar um texto, edite `src/content.ts`. As perguntas do FAQ alimentam ao mesmo tempo a seção da página e o JSON-LD `FAQPage`.
 
 ## Antes de publicar (pendências)
 
-Os dados do contato ficam em um lugar só, o arquivo [`.env`](.env). Eles são injetados no `index.html` no build.
+Os dados do contato ficam em um lugar só, o arquivo [`.env`](.env). O `<head>` usa os valores via `%VITE_...%` e o React via `import.meta.env` (ver `src/config.ts`).
 
 - [ ] `VITE_WHATSAPP`: número real (só dígitos, `55` + DDD + número)
 - [ ] `VITE_PHONE_DISPLAY`: o mesmo número formatado
 - [ ] `VITE_CREF`: número do CREF
 - [ ] `VITE_SITE_URL`: domínio definitivo (canonical, Open Graph, sitemap e dados estruturados usam ele)
-- [ ] Fotos em `public/img/` (hoje são placeholders `.svg`). Trocar por `.webp`/`.jpg` e atualizar o `src` no `index.html`:
+- [ ] Fotos em `public/img/` (hoje são placeholders `.svg`). Trocar por `.webp`/`.jpg` e atualizar o `src` em `src/content.ts` (objeto `photos`):
   - `victor-hero` — Victor treinando um aluno, vertical 4:5 (~1200×1500)
   - `victor-sobre` — retrato do Victor, vertical 4:5
   - `aluno-1` a `aluno-4` — alunos (com autorização de uso de imagem), 4:5
