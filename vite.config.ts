@@ -1,5 +1,7 @@
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+import path from 'node:path'
 
 // Gera robots.txt e sitemap.xml no build do cliente a partir de VITE_SITE_URL,
 // para que o domínio fique definido num lugar só (.env).
@@ -31,7 +33,8 @@ function seoFiles(siteUrl: string): Plugin {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_')
   return {
-    plugins: [react(), seoFiles(env.VITE_SITE_URL || 'https://example.com')],
+    resolve: { alias: { '@': path.resolve(__dirname, 'src') } },
+    plugins: [react(), tailwindcss(), seoFiles(env.VITE_SITE_URL || 'https://example.com')],
     define: { __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()) },
   }
 })

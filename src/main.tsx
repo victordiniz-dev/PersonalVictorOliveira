@@ -1,4 +1,5 @@
 import '@fontsource-variable/archivo/wdth.css'
+import './index.css'
 import './styles.css'
 import './motion.css'
 import { StrictMode } from 'react'

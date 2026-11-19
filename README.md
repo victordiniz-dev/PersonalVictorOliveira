@@ -52,6 +52,9 @@ Os dados do contato ficam em um lugar só, o arquivo [`.env`](.env). O `<head>` 
   - `victor-hero` — Victor treinando um aluno, vertical 4:5 (~1200×1500)
   - `victor-sobre` — retrato do Victor, vertical 4:5
   - `aluno-1` a `aluno-4` — alunos (com autorização de uso de imagem), 4:5
+- [ ] **Depoimentos:** os 3 textos em `src/content.ts` (`testimonials`) são EXEMPLOS e aparecem com a etiqueta "Depoimento de exemplo". Trocar por depoimentos reais (com autorização) e apagar `placeholder: true`. Não publicar com texto inventado
+- [ ] **Antes e depois:** trocar `public/img/antes.svg` e `depois.svg` por fotos reais de um aluno (mesmo enquadramento, 4:5) e ajustar `beforeAfter` em `src/content.ts`
+- [ ] Atualizar de vez em quando `instagramFollowers` em `src/content.ts` (hoje 1.400)
 - [ ] Revisar os textos com o Victor (local das aulas presenciais, o que entra na consultoria, FAQ)
 - [ ] Depois do deploy: cadastrar o site no Google Search Console e enviar o `sitemap.xml`
 - [ ] Criar/atualizar o Perfil da Empresa no Google (Google Meu Negócio) apontando para o site; é o que mais pesa na busca local "personal trainer Vila Velha"
@@ -69,6 +72,20 @@ Os dados do contato ficam em um lugar só, o arquivo [`.env`](.env). O `<head>` 
 ## Design
 
 Editorial esportivo: grafite `#222529`, giz `#EDEBE5` e laranja-sinal `#FF5B1A`. Uma família só, a Archivo variável, usando o eixo de largura: condensada nos títulos e normal no texto. O único movimento automático é o título do hero "contraindo" de largo para condensado ao carregar; ele é desligado para quem usa "reduzir movimento".
+
+## Componentes do 21st.dev
+
+O 21st.dev hoje exige conta para liberar o código. Os componentes abaixo são os mesmos que ele publica, instalados das bibliotecas abertas de origem com `npx shadcn@latest add` (base Tailwind v4 + shadcn em `components.json`, tokens mapeados para a paleta do site em `src/index.css`). Cada arquivo em `src/components/ui/` tem no topo a origem e o que foi adaptado.
+
+| Componente | Origem | Onde |
+|---|---|---|
+| Animated Testimonials | Aceternity UI | seção Depoimentos |
+| Image Comparison | Motion Primitives | Resultados (antes e depois) |
+| Number Ticker | Magic UI | Resultados (seguidores) |
+| Text Scramble | Motion Primitives | séries da ficha (5×5…) |
+| Magic Card | Magic UI | painéis de atendimento |
+
+Adaptações principais: cores e fonte do site, acessibilidade (teclado no comparador, nomes nos botões, leitor de tela), sem quebrar a pré-renderização (nada de `Math.random` no render, o contador já sai com o número real no HTML) e respeito a "reduzir movimento" via `MotionConfig`.
 
 ## Skills do Claude
 

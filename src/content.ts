@@ -150,3 +150,47 @@ export const faqs: Faq[] = [
       'Depende da modalidade e de quantas vezes por semana você vai treinar. Chame no WhatsApp para receber as opções.',
   },
 ]
+
+// ---------- Resultados ----------
+
+// TODO: trocar por fotos reais de antes e depois de um aluno (com autorização), mesmo
+// enquadramento e mesmo tamanho nas duas, formato 4:5.
+export const beforeAfter = {
+  before: { src: '/img/antes.svg', alt: 'Aluno antes de começar o acompanhamento' },
+  after: { src: '/img/depois.svg', alt: 'O mesmo aluno depois do acompanhamento' },
+}
+
+// Seguidores do @victoroliveira.personal (1.418 em 19/11/2026). Atualizar de vez em quando.
+export const instagramFollowers = 1400
+
+// ---------- Depoimentos ----------
+
+// TODO: TEXTOS DE EXEMPLO. Trocar por depoimentos reais (com autorização do aluno) e
+// apagar `placeholder: true`. Enquanto houver placeholder, a página mostra a etiqueta
+// "Depoimento de exemplo". Não publicar o site com depoimentos inventados.
+export const testimonials = [
+  {
+    quote:
+      'Eu treinava sozinho havia anos sem sair do lugar. Com a ficha anotada e os ajustes toda semana, minha carga no agachamento finalmente voltou a subir.',
+    name: 'Nome do aluno',
+    designation: 'Presencial em Vila Velha · objetivo: força',
+    src: '/img/aluno-1.svg',
+    placeholder: true,
+  },
+  {
+    quote:
+      'O que mais ajudou foi não precisar pensar no treino. Chego na academia, abro o plano e sei exatamente o que fazer e com quanto de carga.',
+    name: 'Nome da aluna',
+    designation: 'Consultoria online · objetivo: emagrecimento',
+    src: '/img/aluno-2.svg',
+    placeholder: true,
+  },
+  {
+    quote:
+      'Mando o vídeo da execução e recebo a correção no mesmo dia. Parece que ele está do lado, mesmo eu treinando em outra cidade.',
+    name: 'Nome do aluno',
+    designation: 'Consultoria online · objetivo: hipertrofia',
+    src: '/img/aluno-3.svg',
+    placeholder: true,
+  },
+]

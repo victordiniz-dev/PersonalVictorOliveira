@@ -313,32 +313,11 @@
     }
   }
 
-  @keyframes float-up {
-    from {
-      translate: 0 3rem;
-    }
-    to {
-      translate: 0 -3rem;
-    }
-  }
-
   .motion .hero__frame img {
     animation:
       settle 1.8s var(--ease-out) 0.15s both,
       drift linear both;
     animation-timeline: auto, view();
-  }
-
-  /* Coluna par da grade de alunos desliza mais devagar que a ímpar */
-  @media (min-width: 861px) {
-    .results__grid li:nth-child(even) {
-      transform: none;
-    }
-
-    .motion .results__grid li:nth-child(even) {
-      animation: float-up linear both;
-      animation-timeline: view();
-    }
   }
 }
 
@@ -399,21 +378,6 @@
 
 .link-quiet:hover {
   text-underline-offset: 0.45em;
-}
-
-@media (hover: hover) {
-  .results__grid li {
-    overflow: hidden;
-    border-radius: 0.375rem;
-  }
-
-  .results__grid img {
-    transition: scale 0.9s var(--ease-out);
-  }
-
-  .results__grid li[data-inview]:hover img {
-    scale: 1.05;
-  }
 }
 
 .faq__list summary {

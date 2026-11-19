@@ -729,12 +729,9 @@ h3 {
 }
 
 .mode {
+  --magic-bg: var(--chalk);
+  --magic-border: var(--ink);
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: clamp(1.75rem, 3.5vw, 3rem);
-  border: 2px solid var(--ink);
   border-radius: 0.75rem;
   overflow: hidden;
   transition:
@@ -743,9 +740,25 @@ h3 {
 }
 
 .mode--dark {
+  --magic-bg: var(--ink);
+  --magic-border: rgb(237 235 229 / 0.16);
   background: var(--ink);
   color: var(--chalk);
   color-scheme: dark;
+}
+
+/* Magic Card (luz que segue o mouse): borda de 2px que acende perto do cursor */
+.mode__card {
+  height: 100%;
+  border-width: 2px;
+}
+
+.mode__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  padding: clamp(1.75rem, 3.5vw, 3rem);
 }
 
 /* Anilha decorativa no canto: gira devagar no hover */
@@ -925,22 +938,126 @@ h3 {
   margin-top: 2rem;
 }
 
-.results__grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(0.75rem, 2vw, 1.25rem);
+/* Número de seguidores (Number Ticker) */
+.results__stat {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.85rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--iron);
+  max-width: 32rem;
 }
 
-.results__grid li:nth-child(even) {
-  transform: translateY(clamp(1.5rem, 4vw, 3rem));
+.results__stat-number {
+  color: var(--signal);
+  font-size: clamp(3rem, 2.2rem + 3vw, 4.75rem);
+  font-stretch: 62%;
+  font-weight: 850;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
 }
 
-.results__grid img {
+.results__stat-label {
+  max-width: 14rem;
+  color: var(--steel);
+  font-size: var(--fs-small);
+  line-height: 1.4;
+}
+
+/* Comparador antes/depois (Image Comparison) */
+.results__compare {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.results__frame {
   width: 100%;
   aspect-ratio: 4 / 5;
-  object-fit: cover;
-  border-radius: 0.375rem;
+  max-height: 44rem;
+  border-radius: 0.75rem;
   background: var(--iron);
+}
+
+.results__frame:focus-visible {
+  outline-offset: 4px;
+}
+
+.results__handle {
+  width: 3px;
+  margin-left: -1.5px;
+  background: var(--signal);
+}
+
+/* Pegador redondo com duas setinhas desenhadas em CSS */
+.results__grip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.35);
+  transition: scale 0.3s var(--ease-out);
+}
+
+.results__grip::before,
+.results__grip::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-block: 0.4rem solid transparent;
+  translate: 0 -50%;
+}
+
+.results__grip::before {
+  left: 0.7rem;
+  border-right: 0.5rem solid var(--ink);
+}
+
+.results__grip::after {
+  right: 0.7rem;
+  border-left: 0.5rem solid var(--ink);
+}
+
+.results__frame:hover .results__grip,
+.results__frame:focus-visible .results__grip {
+  scale: 1.1;
+}
+
+.results__label {
+  position: absolute;
+  bottom: 1rem;
+  z-index: 2;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--graphite) 80%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.results__label--before {
+  left: 1rem;
+}
+
+.results__label--after {
+  right: 1rem;
+  background: var(--signal);
+  color: var(--ink);
+}
+
+.results__caption {
+  color: var(--steel);
+  font-size: var(--fs-small);
 }
 
 @media (max-width: 860px) {
@@ -951,10 +1068,51 @@ h3 {
   .results__head {
     position: static;
   }
+}
 
-  .results__grid {
-    padding-bottom: 2rem;
-  }
+/* ---------- depoimentos (Animated Testimonials) ---------- */
+
+.testimonials {
+  background: var(--ink);
+}
+
+.testimonial-nav {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1.5px solid var(--chalk);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--chalk);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background-color 0.3s var(--ease-out),
+    color 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out);
+}
+
+.testimonial-nav svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.testimonial-nav:hover {
+  background: var(--signal);
+  border-color: var(--signal);
+  color: var(--ink);
+}
+
+.testimonial-placeholder {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.65rem;
+  border: 1.5px dashed var(--signal);
+  border-radius: 999px;
+  color: var(--signal);
+  font-size: 0.8125rem;
+  font-weight: 650;
 }
 
 /* ---------- sobre ---------- */

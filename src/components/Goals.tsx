@@ -1,4 +1,20 @@
+import { useRef } from 'react'
+import { useInView } from 'motion/react'
 import { goals } from '../content'
+import { TextScramble } from '@/components/ui/text-scramble'
+
+/** A prescrição (5×5, 3×15…) se embaralha e assenta quando a linha aparece. */
+function ScrambleOnView({ children }: { children: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: true, margin: '0px 0px -10% 0px' })
+  return (
+    <span ref={ref}>
+      <TextScramble as="span" trigger={inView} duration={0.9} speed={0.05} characterSet="0123456789×">
+        {children}
+      </TextScramble>
+    </span>
+  )
+}
 
 /** Objetivos apresentados como uma ficha de treino (tabela de verdade). */
 export function Goals() {
@@ -29,7 +45,7 @@ export function Goals() {
                   <span className="ficha__goal">{goal.name}</span>
                   <span className="ficha__rx">
                     <span className="sr-only">Exemplo de prescrição: </span>
-                    {goal.prescription}
+                    <ScrambleOnView>{goal.prescription}</ScrambleOnView>
                   </span>
                 </th>
                 <td>{goal.training}</td>
